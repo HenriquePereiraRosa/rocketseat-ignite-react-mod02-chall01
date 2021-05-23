@@ -36,24 +36,23 @@ const Home = (): JSX.Element => {
     async function loadProducts() {
       const response = await api.get<Product[]>('products');
 
-      const products = response.data.map(product => ({
+      const productsLoad = response.data.map(product => ({
         ...product,
         priceFormatted: formatPrice(product.price)
       }));
-      setProducts(products);
+      setProducts(productsLoad);
     }
     loadProducts();
   }, []);
 
   async function handleAddProduct(id: number) {
     addProduct(id);
-    toast.success(`🎉 Added id ${id} to Cart!`);
   }
 
   return (
     <ProductList>
       {products.map(product => (
-        <li>
+        <li key={product.id.toString()}>
           <img src={product.image} alt={product.title} />
           <strong> {product.title}</strong>
           <span>{formatPrice(product.price)} </span>

@@ -39,25 +39,28 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       const stock = await api.get(`stock/${productId}`);
       const currentAmount = productFound ? productFound.amount : 0;
-      const amount  = currentAmount + 1;
+      const amount = currentAmount + 1;
 
-      if (amount > stock.data.amount){
-        toast.error("Quantidade desejada não está disponível");
+      if (amount > stock.data.amount) {
+        toast.error("Quantidade desejada ultrapassa a disponível");
         return;
       }
 
       if (!productFound) {
-        api.get<Product>(`products/${productId}`).then(response => {
-          const newProduct = { ...response.data, amount: 1 }
-          cartAux.push(newProduct);
-        });
+        const response = await api.get<Product>(`products/${productId}`);
+
+        const newProduct = { ...response.data, amount: 1 }
+        cartAux.push(newProduct);
       } else {
         productFound.amount = amount;
       }
       setCart(cartAux);
-      localStorage.setItem('@RocketShoes:cart', JSON.stringify(cartAux))
+
+      const cartString = JSON.stringify(cartAux);
+      localStorage.setItem('@RocketShoes:cart', cartString)
+      toast.success(`🎉 Added id ${productId} to Cart!`);
     } catch {
-      toast.error('Erro ao adicionar produto');
+      toast.error('Erro ao adicionar produto', { delay: 10000 });
     }
   };
 
