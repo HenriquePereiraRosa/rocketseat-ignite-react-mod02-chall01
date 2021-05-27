@@ -4,6 +4,7 @@ import {
   MdAddCircleOutline,
   MdRemoveCircleOutline,
 } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../util/format';
@@ -49,6 +50,10 @@ const Cart = (): JSX.Element => {
 
   function handleRemoveProduct(productId: number) {
     removeProduct(productId);
+  }
+
+  function handleOrderCheckout() {
+    toast.success(`😉 You bouth some nice RocketShoes!`);
   }
 
   return (
@@ -117,7 +122,9 @@ const Cart = (): JSX.Element => {
       </ProductTable>
 
       <footer>
-        <button type="button">Finalizar pedido</button>
+        <button type="button"
+          onClick={() => handleOrderCheckout()}
+        >Finalizar pedido</button>
 
         <Total>
           <span>TOTAL</span>
